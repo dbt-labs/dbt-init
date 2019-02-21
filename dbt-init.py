@@ -3,15 +3,13 @@ from argparse import ArgumentParser, ArgumentTypeError
 import sys
 import os
 import re
-import shutil
 
 import jinja2
 
-# Use the pattern:
-# path = dir_path + dir
-starter_project_dir_path = os.path.dirname(__file__)
-starter_project_dir = "starter-project"
-starter_project_path = os.path.join(starter_project_dir_path, starter_project_dir)
+
+STARTER_PROJECT_DIR_PATH = os.path.dirname(__file__)
+STARTER_PROJECT_DIR = "starter-project"
+STARTER_PROJECT_PATH = os.path.join(STARTER_PROJECT_DIR_PATH, STARTER_PROJECT_DIR)
 
 
 def render_template(dir_path, filename, project):
@@ -27,11 +25,10 @@ def render_template(dir_path, filename, project):
 
 
 def write_file(file_path, contents):
-    path, file = os.path.split(file_path)
-    if not os.path.exists(path):
-        os.makedirs(path)
-    f = open(file_path, "w")
-    f.write(contents)
+    dir_name = os.path.dirname(file_path)
+    os.makedirs(dir_name, exist_ok=True)
+    with open(file_path, "w") as f:
+        f.write(contents)
 
 
 def parse_args(args):
@@ -120,11 +117,11 @@ def create_starter_project(project):
     client_project_path = os.path.join(project["dir_path"], project["dir_name"])
 
     # for each file in the starter project, copy a rendered version of the file
-    for subdir, dirs, files in os.walk(starter_project_path):
-        for file in files:
-            rendered_template = render_template(subdir, file, project)
-            target_dir = subdir.replace(starter_project_path, client_project_path)
-            target_filepath = os.path.join(target_dir, file)
+    for subdir, dirs, files in os.walk(STARTER_PROJECT_PATH):
+        for base_name in files:
+            rendered_template = render_template(subdir, base_name, project)
+            target_dir = subdir.replace(STARTER_PROJECT_PATH, client_project_path)
+            target_filepath = os.path.join(target_dir, base_name)
             write_file(target_filepath, rendered_template)
 
     print(
