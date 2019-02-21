@@ -1,1 +1,1 @@
-{{project.warehouse}}
+select 1

@@ -1,10 +1,10 @@
-name: {{project.client}}
+name: {{project.name}}
 
-profile: {{project.client}}
+profile: {{project.profile_name}}
 
 on-run-end:
   {% if project.warehouse == 'redshift' %}
-  - "redshift grant statements"
+  - "{% raw %}{% for schema in schemas %}{% endraw %}"
   {% endif %}
   {% if project.warehouse == 'snowflake' %}
   - "snowflake grant statements"
@@ -13,4 +13,4 @@ models:
   {% if project.warehouse == 'redshift' %}
   bind: false
   {% endif %}
-  {{project.client}}:
+  {{project.name}}:
