@@ -1,0 +1,50 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.6.2-stretch
+
+    steps:
+      - checkout
+
+      - run:
+          name: "Install dependencies"
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+      - run:
+          name: "Create Starter Project - No warehouse"
+          command: |
+            mkdir jaffle_shop_no_warehouse
+            . venv/bin/activate
+            python dbt-init.py --client jaffle_shop ./jaffle_shop_no_warehouse
+      - run:
+          name: "Create Starter Project - BigQuery"
+          command: |
+            mkdir jaffle_shop_bigquery
+            . venv/bin/activate
+            python dbt-init.py --client jaffle_shop --warehouse bigquery ./jaffle_shop_bigquery
+      - run:
+          name: "Create Starter Project - Postgres"
+          command: |
+            mkdir jaffle_shop_postgres
+            . venv/bin/activate
+            python dbt-init.py --client jaffle_shop --warehouse postgres ./jaffle_shop_postgres
+      - run:
+          name: "Create Starter Project - Redshift"
+          command: |
+            mkdir jaffle_shop_redshift
+            . venv/bin/activate
+            python dbt-init.py --client jaffle_shop --warehouse redshift ./jaffle_shop_redshift
+      - run:
+          name: "Create Starter Project - Snowflake"
+          command: |
+            mkdir jaffle_shop_snowflake
+            . venv/bin/activate
+            python dbt-init.py --client jaffle_shop --warehouse snowflake ./jaffle_shop_snowflake
+      - save_cache:
+          key: deps1-{{ .Branch }}
+          paths:
+            - "venv"
