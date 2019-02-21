@@ -90,6 +90,8 @@ def handle(parsed):
             target_dir = subdir.replace(starter_project_path, client_project_path)
             target_filepath = os.path.join(target_dir, file)
             write_file(target_filepath, rendered_template)
+    
+    print("New dbt project for {} created at {}! 🎉".format(parsed.client, client_project_path))
 
 
 def main(args=None):
