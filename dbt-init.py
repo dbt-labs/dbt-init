@@ -5,6 +5,8 @@ import os
 import re
 import shutil
 
+import jinja2
+
 dir_path = os.path.dirname(__file__)
 starter_project_path = os.path.join(dir_path, "starter-project")
 
@@ -15,12 +17,28 @@ class OperationalError(Exception):
         super(OperationalError, self).__init__(message)
 
 
+def render_template(dir_path, filename, parsed):
+    """ Load a spec. There may be templated password variables, which we render using Jinja. """
+    environment = jinja2.Environment(loader=jinja2.FileSystemLoader(dir_path),
+                                     undefined=jinja2.StrictUndefined)
+
+    loaded = environment.get_template(filename)
+    
+    rendered = loaded.render(project=parsed)
+    return rendered
+
+
 def parse_args(args):
     parser = ArgumentParser(description="dbt project starter")
     parser.add_argument(
         "--client",
         required=True,
         help="The name of the client you are creating this project for",
+    )
+    parser.add_argument(
+        "--warehouse",
+        choices=['postgres','redshift','snowflake', 'bigquery'],
+        help="The warehouse your client is using",
     )
     parser.add_argument(
         "target_directory",
@@ -51,16 +69,16 @@ def handle(parsed):
     # create a directory named target_directory/<client>-dbt
     project_directory = "{}-dbt".format(parsed.client.replace("_", "-"))
     project_path = os.path.join(parsed.target_directory, project_directory)
+    os.mkdir(project_path)
 
-    # Copy the contents of the `starter-project` directory into the target directory
-    shutil.copytree(starter_project_path, project_path)
-
-    print(
-        "Starter project for {} succesfully created at {}".format(
-            parsed.client, project_path
-        )
-    )
-
+    # for each file in the starter project, copy a rendered version of the file
+    # will this walk recursively?
+    for subdir, dirs, files in os.walk(starter_project_path):
+        for file in files:
+            rendered_template = render_template(subdir, file, parsed)
+            f = open(os.path.join(project_path, file), "w")
+            # TODO: replicate nested structure (currently putting everything in one directory)
+            f.write(rendered_template)
 
 def main(args=None):
     if args is None:

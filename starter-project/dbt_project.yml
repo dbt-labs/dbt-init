@@ -1,1 +1,16 @@
-name: my_dbt_project
+name: {{project.client}}
+
+profile: {{project.client}}
+
+on-run-end:
+  {% if project.warehouse == 'redshift' %}
+  - "redshift grant statements"
+  {% endif %}
+  {% if project.warehouse == 'snowflake' %}
+  - "snowflake grant statements"
+  {% endif %}
+models:
+  {% if project.warehouse == 'redshift' %}
+  bind: false
+  {% endif %}
+  {{project.client}}:
