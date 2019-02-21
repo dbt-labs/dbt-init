@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from argparse import ArgumentParser
+from argparse import ArgumentParser, ArgumentTypeError
 import sys
 import os
 import re
@@ -46,6 +46,7 @@ def parse_args(args):
         "--client",
         required=True,
         help="The name of the client you are creating this project for",
+        type=check_camel_case,
     )
     parser.add_argument(
         "--warehouse",
@@ -55,18 +56,22 @@ def parse_args(args):
     parser.add_argument(
         "--project_name",
         help="The name of your dbt project (as defined in dbt_project.yml). Defaults to <my_client>",
+        type=check_camel_case,
     )
     parser.add_argument(
         "--project_directory",
         help="The name of your dbt project directory. Defaults to <my-client>-dbt",
+        type=check_kebab_case,
     )
     parser.add_argument(
         "--profile_name",
         help="The name of the profile your dbt project will use. Defaults to <my_client>",
+        type=check_camel_case,
     )
     parser.add_argument(
         "target_dir",
         help="The target directory name. Note that the project will be created as a subdirectory within the target directory",
+        type=check_file_path,
     )
 
     parsed = parser.parse_args(args)
@@ -78,14 +83,6 @@ def handle(parsed):
     describes the dbt project
     """
 
-    # check that the client name only contains letters and underscores
-    if not re.match("^[a-z0-9_]*$", parsed.client):
-        raise OperationalError(
-            'Client "{}" should only contain lower case letters, numbers, and underscores.'.format(
-                parsed.client
-            )
-        )
-    # check that the target directory is valid
     if not os.path.exists(parsed.target_dir):
         raise OperationalError(
             "Target directory {} does not exist!".format(parsed.target_dir)
@@ -105,10 +102,33 @@ def handle(parsed):
     return project
 
 
+def check_camel_case(s):
+    if re.match("^[a-z0-9_]*$", s) is None:
+        raise ArgumentTypeError(
+            "{} should only contain lower case letters, numbers, and underscores.".format(
+                s
+            )
+        )
+    return s
+
+
+def check_kebab_case(s):
+    if re.match("^[a-z0-9-]*$", s) is None:
+        raise ArgumentTypeError(
+            "{} should only contain lower case letters, numbers, and hyphens.".format(s)
+        )
+    return s
+
+
+def check_file_path(s):
+    if not os.path.exists(s):
+        raise ArgumentTypeError("Target directory {} does not exist!".format(s))
+    return s
+
+
 def create_starter_project(project):
     # set the path we are targeting
     client_project_path = os.path.join(project["dir_path"], project["dir_name"])
-    os.mkdir(client_project_path)
 
     # for each file in the starter project, copy a rendered version of the file
     for subdir, dirs, files in os.walk(starter_project_path):
