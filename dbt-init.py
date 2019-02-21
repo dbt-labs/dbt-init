@@ -7,8 +7,11 @@ import shutil
 
 import jinja2
 
-dir_path = os.path.dirname(__file__)
-starter_project_path = os.path.join(dir_path, "starter-project")
+# Use the pattern:
+# path = dir_path + dir
+starter_project_dir_path = os.path.dirname(__file__)
+starter_project_dir = "starter-project"
+starter_project_path = os.path.join(starter_project_dir_path, starter_project_dir)
 
 
 class OperationalError(Exception):
@@ -18,14 +21,23 @@ class OperationalError(Exception):
 
 
 def render_template(dir_path, filename, parsed):
-    """ Load a spec. There may be templated password variables, which we render using Jinja. """
-    environment = jinja2.Environment(loader=jinja2.FileSystemLoader(dir_path),
-                                     undefined=jinja2.StrictUndefined)
+    """ Load the starter project and render the project details """
+    environment = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(dir_path), undefined=jinja2.StrictUndefined
+    )
 
     loaded = environment.get_template(filename)
-    
+
     rendered = loaded.render(project=parsed)
     return rendered
+
+
+def write_file(file_path, contents):
+    path, file = os.path.split(file_path)
+    if not os.path.exists(path):
+        os.makedirs(path)
+    f = open(file_path, "w")
+    f.write(contents)
 
 
 def parse_args(args):
@@ -37,11 +49,11 @@ def parse_args(args):
     )
     parser.add_argument(
         "--warehouse",
-        choices=['postgres','redshift','snowflake', 'bigquery'],
+        choices=["postgres", "redshift", "snowflake", "bigquery"],
         help="The warehouse your client is using",
     )
     parser.add_argument(
-        "target_directory",
+        "target_dir",
         help="The target directory name. Note that the project will be created as a subdirectory within the target directory",
     )
 
@@ -61,24 +73,24 @@ def handle(parsed):
         )
 
     # check that the target directory is valid
-    if not os.path.exists(parsed.target_directory):
+    if not os.path.exists(parsed.target_dir):
         raise OperationalError(
-            "Target directory {} does not exist!".format(parsed.target_directory)
+            "Target directory {} does not exist!".format(parsed.target_dir)
         )
 
-    # create a directory named target_directory/<client>-dbt
-    project_directory = "{}-dbt".format(parsed.client.replace("_", "-"))
-    project_path = os.path.join(parsed.target_directory, project_directory)
-    os.mkdir(project_path)
+    # set the path we are targeting
+    client_project_dir = "{}-dbt".format(parsed.client.replace("_", "-"))
+    client_project_path = os.path.join(parsed.target_dir, client_project_dir)
+    os.mkdir(client_project_path)
 
     # for each file in the starter project, copy a rendered version of the file
-    # will this walk recursively?
     for subdir, dirs, files in os.walk(starter_project_path):
         for file in files:
             rendered_template = render_template(subdir, file, parsed)
-            f = open(os.path.join(project_path, file), "w")
-            # TODO: replicate nested structure (currently putting everything in one directory)
-            f.write(rendered_template)
+            target_dir = subdir.replace(starter_project_path, client_project_path)
+            target_filepath = os.path.join(target_dir, file)
+            write_file(target_filepath, rendered_template)
+
 
 def main(args=None):
     if args is None:
