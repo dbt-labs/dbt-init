@@ -2,15 +2,43 @@ name: {{project.name}}
 
 profile: {{project.profile_name}}
 
-on-run-end:
-  {% if project.warehouse == 'redshift' %}
-  - "{% raw %}{% for schema in schemas %}{% endraw %}"
-  {% endif %}
-  {% if project.warehouse == 'snowflake' %}
-  - "snowflake grant statements"
-  {% endif %}
+version: '1.0'
+
+source-paths: ["models"]
+analysis-paths: ["analysis"] 
+test-paths: ["tests"]
+data-paths: ["data"]
+macro-paths: ["macros"]
+
+target-path: "target"
+clean-targets:
+    - "target"
+    - "dbt_modules"
+
 models:
-  {% if project.warehouse == 'redshift' %}
+  {% if project.warehouse == 'redshift' -%}
   bind: false
   {% endif %}
+  post-hook:
+    {% if project.warehouse == 'redshift' %}
+    - {% raw %}"grant select on {{this}} to group reporter;"{% endraw %}
+    {% elif project.warehouse == 'snowflake' %}
+    - {% raw %}"grant select on {{this}} to role REPORTER;"{% endraw %}
+    {% endif %}
   {{project.name}}:
+    materialized: view
+
+seeds:
+  post-hook:
+    {% if project.warehouse == 'redshift' %}
+    - {% raw %}"grant select on {{this}} to group reporter;"{% endraw %}
+    {% elif project.warehouse == 'snowflake' %}
+    - {% raw %}"grant select on {{this}} to role REPORTER;"{% endraw %}
+    {% endif %}
+
+on-run-end:
+  {% if project.warehouse == 'redshift' %}
+  - {% raw %}"{% for schema in schemas %}grant usage on schema {{ schema }} to group reporter;{% endfor %}"{% endraw %}
+  {% elif project.warehouse == 'snowflake' %}
+  - {% raw %}"{% for schema in schemas %}grant usage on schema {{ schema }} to role REPORTER;{% endfor %}"{% endraw %}
+  {% endif %}
