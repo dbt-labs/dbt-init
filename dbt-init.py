@@ -14,12 +14,6 @@ starter_project_dir = "starter-project"
 starter_project_path = os.path.join(starter_project_dir_path, starter_project_dir)
 
 
-class OperationalError(Exception):
-    def __init__(self, message):
-        self.message = message
-        super(OperationalError, self).__init__(message)
-
-
 def render_template(dir_path, filename, project):
     """ Load the starter project and render the project details """
     environment = jinja2.Environment(
@@ -82,11 +76,6 @@ def handle(parsed):
     """ Checks that the arguments are valid, and returns a dictionary that
     describes the dbt project
     """
-
-    if not os.path.exists(parsed.target_dir):
-        raise OperationalError(
-            "Target directory {} does not exist!".format(parsed.target_dir)
-        )
 
     kebab_case_client = parsed.client.replace("_", "-")
 
