@@ -1,0 +1,43 @@
+{% if project.warehouse == 'bigquery' %}
+{{project.profile_name}}:
+  outputs:
+    dev:
+      type: {{project.warehouse}}
+      threads: 8
+      method: service-account
+      project: [project]
+      schema: dbt_[username] # e.g. dbt_alice
+      keyfile: /Users/[user_name]/.dbt/[filename].json
+      timeout_seconds: 300
+  target: dev
+
+{% elif project.warehouse in ('postgres', 'redshift') %}
+{{project.profile_name}}:
+  outputs:
+    dev:
+      type: {{project.warehouse}}
+      threads: 8
+      host: [hostname]
+      user: [username]
+      pass: [password]
+      port: 5439
+      dbname: [database name]
+      schema: dbt_[username] # e.g. dbt_alice
+  target: dev
+
+{% elif project.warehouse == 'snowflake' %}
+{{project.profile_name}}:
+  outputs:
+    dev:
+      type: {{project.warehouse}}
+      threads: 16
+      account: [account id]
+      user: [username]
+      password: [password]
+      role: transformer
+      database: analytics
+      warehouse: transforming
+      schema: dbt_[user_name] # e.g. dbt_alice
+      client_session_keep_alive: False
+  target: dev
+{% endif %}

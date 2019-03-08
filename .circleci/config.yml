@@ -15,12 +15,6 @@ jobs:
             . venv/bin/activate
             pip install -r requirements.txt
       - run:
-          name: "Create Starter Project - No warehouse"
-          command: |
-            mkdir jaffle_shop_no_warehouse
-            . venv/bin/activate
-            python dbt-init.py --client jaffle_shop ./jaffle_shop_no_warehouse
-      - run:
           name: "Create Starter Project - BigQuery"
           command: |
             mkdir jaffle_shop_bigquery

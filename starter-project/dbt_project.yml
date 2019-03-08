@@ -4,6 +4,8 @@ profile: {{project.profile_name}}
 
 version: '1.0'
 
+require-dbt-version: ">=0.13.0"
+
 source-paths: ["models"]
 analysis-paths: ["analysis"] 
 test-paths: ["tests"]
@@ -15,30 +17,32 @@ clean-targets:
     - "target"
     - "dbt_modules"
 
-models:
-  {% if project.warehouse == 'redshift' -%}
-  bind: false
-  {% endif %}
-  post-hook:
-    {% if project.warehouse == 'redshift' %}
-    - {% raw %}"grant select on {{this}} to group reporter;"{% endraw %}
-    {% elif project.warehouse == 'snowflake' %}
-    - {% raw %}"grant select on {{this}} to role REPORTER;"{% endraw %}
-    {% endif %}
-  {{project.name}}:
-    materialized: view
+{% if project.warehouse == 'bigquery' %}
+{# Currently we don't have any best practice BQ configurations #}
 
-seeds:
-  post-hook:
-    {% if project.warehouse == 'redshift' %}
-    - {% raw %}"grant select on {{this}} to group reporter;"{% endraw %}
-    {% elif project.warehouse == 'snowflake' %}
-    - {% raw %}"grant select on {{this}} to role REPORTER;"{% endraw %}
-    {% endif %}
+{% elif project.warehouse == 'postgres' -%}
+{# Currently we don't have any best practice PG configurations #}
+
+{% elif project.warehouse == 'redshift' -%}
+models:
+  bind: false
 
 on-run-end:
-  {% if project.warehouse == 'redshift' %}
-  - {% raw %}"{% for schema in schemas %}grant usage on schema {{ schema }} to group reporter;{% endfor %}"{% endraw %}
-  {% elif project.warehouse == 'snowflake' %}
-  - {% raw %}"{% for schema in schemas %}grant usage on schema {{ schema }} to role REPORTER;{% endfor %}"{% endraw %}
-  {% endif %}
+  - {% raw %}{{grant_all_on_schemas(schemas, 'reporter')}}{% endraw %}
+  - {% raw %}{{grant_all_on_schemas(schemas, 'transformer')}}{% endraw %}
+
+{% elif project.warehouse == 'snowflake' %}
+
+quoting:
+  database: false
+  identifier: false
+  schema: false
+
+models:
+  transient: true
+
+on-run-end:
+  - {% raw %}{{grant_all_on_schemas(schemas, 'reporter')}}{% endraw %}
+  - {% raw %}{{grant_all_on_schemas(schemas, 'transformer')}}{% endraw %}
+
+{% endif %}
