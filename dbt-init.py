@@ -41,7 +41,8 @@ def parse_args(args):
     )
     parser.add_argument(
         "--warehouse",
-        choices=["postgres", "redshift", "snowflake", "bigquery"],
+        required=True,
+        choices=["bigquery", "postgres", "redshift", "snowflake"],
         help="The warehouse your client is using",
     )
     parser.add_argument(
