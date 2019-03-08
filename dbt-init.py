@@ -37,7 +37,7 @@ def parse_args(args):
         "--client",
         required=True,
         help="The name of the client you are creating this project for",
-        type=check_camel_case,
+        type=check_snake_case,
     )
     parser.add_argument(
         "--warehouse",
@@ -48,7 +48,7 @@ def parse_args(args):
     parser.add_argument(
         "--project_name",
         help="The name of your dbt project (as defined in dbt_project.yml). Defaults to <my_client>",
-        type=check_camel_case,
+        type=check_snake_case,
     )
     parser.add_argument(
         "--project_directory",
@@ -58,7 +58,7 @@ def parse_args(args):
     parser.add_argument(
         "--profile_name",
         help="The name of the profile your dbt project will use. Defaults to <my_client>",
-        type=check_camel_case,
+        type=check_snake_case,
     )
     parser.add_argument(
         "target_dir",
@@ -89,7 +89,7 @@ def handle(parsed):
     return project
 
 
-def check_camel_case(s):
+def check_snake_case(s):
     if re.match("^[a-z0-9_]*$", s) is None:
         raise ArgumentTypeError(
             "{} should only contain lower case letters, numbers, and underscores.".format(
