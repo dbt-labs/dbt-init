@@ -14,7 +14,7 @@ $ python dbt-init.py --client jaffle_shop --warehouse snowflake  path/to/my/dbt/
 If you're interested in helping build out the starter project, here is a list of variables you can use in your Jinja. Note that a lot of them have defaults based on the client name.
 ```
 {{project.name}}: The name of the project, as defined in `dbt_project.yml`, e.g. jaffle_shop.
-{{project.warehouse}}: The warehouse that a client is using (optional).
+{{project.warehouse}}: The warehouse that a client is using.
 {{project.client_name}}: The name of the client, e.g. jaffle_shop.
 {{project.dir_name}}: The name of the directory this project is in, e.g. jaffle-shop-dbt.
 {{project.profile_name}}: The name of the profile used by this project, e.g. jaffle_shop.
