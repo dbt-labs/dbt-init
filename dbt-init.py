@@ -113,6 +113,12 @@ def check_file_path(s):
     return s
 
 
+def should_copy_file(base_name, contents):
+    is_empty_file = contents.strip() == ""
+    if base_name == ".gitkeep" or not is_empty_file:
+        return True
+
+
 def create_starter_project(project):
     # set the path we are targeting
     client_project_path = os.path.join(project["dir_path"], project["dir_name"])
@@ -121,9 +127,10 @@ def create_starter_project(project):
     for subdir, dirs, files in os.walk(STARTER_PROJECT_PATH):
         for base_name in files:
             rendered_template = render_template(subdir, base_name, project)
-            target_dir = subdir.replace(STARTER_PROJECT_PATH, client_project_path)
-            target_filepath = os.path.join(target_dir, base_name)
-            write_file(target_filepath, rendered_template)
+            if should_copy_file(base_name, rendered_template):
+                target_dir = subdir.replace(STARTER_PROJECT_PATH, client_project_path)
+                target_filepath = os.path.join(target_dir, base_name)
+                write_file(target_filepath, rendered_template)
 
     print(
         "New dbt project for {} created at {}! 🎉".format(
