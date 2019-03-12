@@ -37,17 +37,18 @@ def parse_args(args):
         "--client",
         required=True,
         help="The name of the client you are creating this project for",
-        type=check_camel_case,
+        type=check_snake_case,
     )
     parser.add_argument(
         "--warehouse",
-        choices=["postgres", "redshift", "snowflake", "bigquery"],
+        required=True,
+        choices=["bigquery", "postgres", "redshift", "snowflake"],
         help="The warehouse your client is using",
     )
     parser.add_argument(
         "--project_name",
         help="The name of your dbt project (as defined in dbt_project.yml). Defaults to <my_client>",
-        type=check_camel_case,
+        type=check_snake_case,
     )
     parser.add_argument(
         "--project_directory",
@@ -57,7 +58,7 @@ def parse_args(args):
     parser.add_argument(
         "--profile_name",
         help="The name of the profile your dbt project will use. Defaults to <my_client>",
-        type=check_camel_case,
+        type=check_snake_case,
     )
     parser.add_argument(
         "target_dir",
@@ -88,7 +89,7 @@ def handle(parsed):
     return project
 
 
-def check_camel_case(s):
+def check_snake_case(s):
     if re.match("^[a-z0-9_]*$", s) is None:
         raise ArgumentTypeError(
             "{} should only contain lower case letters, numbers, and underscores.".format(
@@ -112,6 +113,12 @@ def check_file_path(s):
     return s
 
 
+def should_copy_file(base_name, contents):
+    is_empty_file = contents.strip() == ""
+    if base_name == ".gitkeep" or not is_empty_file:
+        return True
+
+
 def create_starter_project(project):
     # set the path we are targeting
     client_project_path = os.path.join(project["dir_path"], project["dir_name"])
@@ -120,9 +127,10 @@ def create_starter_project(project):
     for subdir, dirs, files in os.walk(STARTER_PROJECT_PATH):
         for base_name in files:
             rendered_template = render_template(subdir, base_name, project)
-            target_dir = subdir.replace(STARTER_PROJECT_PATH, client_project_path)
-            target_filepath = os.path.join(target_dir, base_name)
-            write_file(target_filepath, rendered_template)
+            if should_copy_file(base_name, rendered_template):
+                target_dir = subdir.replace(STARTER_PROJECT_PATH, client_project_path)
+                target_filepath = os.path.join(target_dir, base_name)
+                write_file(target_filepath, rendered_template)
 
     print(
         "New dbt project for {} created at {}! 🎉".format(
