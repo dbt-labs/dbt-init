@@ -26,8 +26,21 @@
 
 ## Checklist:
 <!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+
+<!-- Overall -->
 - [ ] My code follows the code style of this project.
 - [ ] My change requires a change to the documentation.
 - [ ] I have updated the documentation accordingly.
 - [ ] I have added tests to cover my changes.
-- [ ] All new and existing tests passed.
+- [ ] My models are materialized appropriately.
+- [ ] My commits related to the pull request look clean. 
+
+<!--- SQL related -->
+- [ ] My SQL follows the Fishtown Analytics style guide.
+
+<!--- Tests -->
+- [ ] All new and existing tests passed locally and in dbt Cloud if relevant.
+- [ ] My new models have the appropriate tests and documentation.
+
+<!---Redshift Specifc -->
+- [ ] Sort and dist keys have been added to models materialized as tables.
