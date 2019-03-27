@@ -15,12 +15,15 @@ STARTER_PROJECT_PATH = os.path.join(STARTER_PROJECT_DIR_PATH, STARTER_PROJECT_DI
 def render_template(dir_path, filename, project):
     """ Load the starter project and render the project details """
     environment = jinja2.Environment(
-        loader=jinja2.FileSystemLoader(dir_path), undefined=jinja2.StrictUndefined
+        loader=jinja2.FileSystemLoader(dir_path),
+        undefined=jinja2.StrictUndefined,
+        keep_trailing_newline=True,
     )
 
     loaded = environment.get_template(filename)
 
     rendered = loaded.render(project=project)
+
     return rendered
 
 
