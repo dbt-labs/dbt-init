@@ -5,11 +5,11 @@ provide it, and populate as much of the dbt project as possible
 
 ## Installation & usage
 1. Clone this repo, and `cd` into it.
-1. Install the requirements:
+2. Install the requirements:
 ```bash
 $ pip3 install -r requirements.txt
 ```
-1. To create a new client project run a command like following:
+3. To create a new client project run a command like following:
 ```bash
 $ python3 dbt-init.py --client jaffle_shop --warehouse snowflake --target_dir ~/clients/
 ```
@@ -21,7 +21,7 @@ client, _excluding_ the actual credentials – e.g.:
  * You can often pre-fill the host and database name.
  * You may want to use an alternate connection method (e.g. OAuth) and update
  the sample file to reflect this.
-1. Ensure that the users/groups/roles within a warehouse match the grant
+2. Ensure that the users/groups/roles within a warehouse match the grant
 statements in the post-run hooks (defined in `dbt_project.yml`).
 
 ## Building out the starter project
