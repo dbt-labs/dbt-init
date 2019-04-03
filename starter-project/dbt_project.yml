@@ -1,13 +1,13 @@
-name: {{project.name}}
+name: {{ project.name }}
 
-profile: {{project.profile_name}}
+profile: {{ project.profile_name }}
 
 version: '1.0'
 
 require-dbt-version: ">=0.13.0"
 
 source-paths: ["models"]
-analysis-paths: ["analysis"] 
+analysis-paths: ["analysis"]
 test-paths: ["tests"]
 data-paths: ["data"]
 macro-paths: ["macros"]
@@ -28,8 +28,8 @@ models:
   bind: false
 
 on-run-end:
-  - {% raw %}{{grant_all_on_schemas(schemas, 'reporter')}}{% endraw %}
-  - {% raw %}{{grant_all_on_schemas(schemas, 'transformer')}}{% endraw %}
+  - {% raw %}{{ grant_all_on_schemas(schemas, 'reporter') }}{% endraw %}
+  - {% raw %}{{ grant_all_on_schemas(schemas, 'transformer') }}{% endraw %}
 
 {% elif project.warehouse == 'snowflake' %}
 
@@ -42,7 +42,7 @@ models:
   transient: true
 
 on-run-end:
-  - {% raw %}{{grant_all_on_schemas(schemas, 'reporter')}}{% endraw %}
-  - {% raw %}{{grant_all_on_schemas(schemas, 'transformer')}}{% endraw %}
+  - {% raw %}{{ grant_all_on_schemas(schemas, 'reporter') }}{% endraw %}
+  - {% raw %}{{ grant_all_on_schemas(schemas, 'transformer') }}{% endraw %}
 
 {% endif %}

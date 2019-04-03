@@ -1,8 +1,8 @@
 {% if project.warehouse == 'bigquery' %}
-{{project.profile_name}}:
+{{ project.profile_name }}:
   outputs:
     dev:
-      type: {{project.warehouse}}
+      type: {{ project.warehouse }}
       threads: 8
       method: service-account
       project: [project]
@@ -12,10 +12,10 @@
   target: dev
 
 {% elif project.warehouse in ('postgres', 'redshift') %}
-{{project.profile_name}}:
+{{ project.profile_name }}:
   outputs:
     dev:
-      type: {{project.warehouse}}
+      type: {{ project.warehouse }}
       threads: 8
       host: [hostname]
       user: [username]
@@ -26,10 +26,10 @@
   target: dev
 
 {% elif project.warehouse == 'snowflake' %}
-{{project.profile_name}}:
+{{ project.profile_name }}:
   outputs:
     dev:
-      type: {{project.warehouse}}
+      type: {{ project.warehouse }}
       threads: 16
       account: [account id]
       user: [username]
