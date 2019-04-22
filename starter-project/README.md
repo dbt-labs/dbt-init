@@ -4,18 +4,20 @@ dbt models for {{ project.client_name }}
 
 ## Getting started
 1. Clone this github repo
-1. Install dbt following [these instructions](https://docs.getdbt.com/docs/installation)
-1. Ask your database administrator for a set of {{ project.warehouse }} credentials.
+2. Install dbt following [these instructions](https://docs.getdbt.com/docs/installation)
+3. Ask your database administrator for a set of {{ project.warehouse }} credentials.
 
-  The database administrator should run the following statements from a super user account to create your account.
+
 {% if project.warehouse == 'bigquery' %}
 {% elif project.warehouse in ('postgres', 'redshift') %}
+  The database administrator should run the following statements from a super user account to create your account.
 ```sql
 create user <user> with
   password '<generate_this>'
   in group transformer, reporter;
 ```
 {% elif project.warehouse == 'snowflake' %}
+  The database administrator should run the following statements from a super user account to create your account.
 ```sql
 create user <user>
     password = '<generate_this>'
@@ -23,19 +25,19 @@ create user <user>
     default_role = transformer;
 ```
 {% endif %}
-1. Copy the example profile to your `~/.dbt` folder (created when installing dbt):
+4. Copy the example profile to your `~/.dbt` folder (created when installing dbt):
 ```bash
 $ cp ./sample.profiles.yml ~/.dbt/profiles.yml
 ```
-1. Populate `~/.dbt/profiles.yml` with your credentials:
+5. Populate `~/.dbt/profiles.yml` with the credentials you obtained in step 3:
 ```bash
 open ~/.dbt
 ```
-1. Verify that you can connect to dbt
+6. Verify that you can connect to your database
 ```
 $ dbt debug
 ```
-1. Verify that you can run dbt
+7. Verify that you can run dbt
 ```
 $ dbt run
 ```
