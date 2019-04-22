@@ -17,7 +17,7 @@ You can also check the available arguments with `python3 dbt-init.py --help`
 
 ## Once you've created your project
 1. Update `sample.profile.yml` to contain the correct profile details for your
-client, _excluding_ the actual credentials – e.g.:
+client, _excluding_ the actual credentials – e.g. username and password:
  * You can often pre-fill the host and database name.
  * You may want to use an alternate connection method (e.g. OAuth) and update
  the sample file to reflect this.
