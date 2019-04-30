@@ -4,10 +4,9 @@
     dev:
       type: {{ project.warehouse }}
       threads: 8
-      method: service-account
+      method: oauth
       project: [project]
-      schema: dbt_[username] # e.g. dbt_alice
-      keyfile: /Users/[user_name]/.dbt/[filename].json
+      dataset: dbt_[username] # e.g. dbt_alice
       timeout_seconds: 300
   target: dev
 
