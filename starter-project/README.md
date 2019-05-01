@@ -9,6 +9,8 @@ dbt models for {{ project.client_name }}
 
 
 {% if project.warehouse == 'bigquery' %}
+  You'll also need to connect to BigQuery using [these instructions](https://docs.getdbt.com/docs/profile-bigquery#section-oauth-authorization).
+
 {% elif project.warehouse in ('postgres', 'redshift') %}
   The database administrator should run the following statements from a super user account to create your account.
 ```sql
@@ -41,3 +43,6 @@ $ dbt debug
 ```
 $ dbt run
 ```
+
+## Coding conventions
+This project follows Fishtown Analytics' [coding conventions](https://github.com/fishtown-analytics/corp/blob/master/dbt_coding_conventions.md) and [git guide](https://github.com/fishtown-analytics/corp/blob/master/git-guide.md).
