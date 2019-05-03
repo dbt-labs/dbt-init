@@ -28,8 +28,8 @@ models:
   bind: false
 
 on-run-end:
-  - {% raw %}{{ grant_select_on_schemas(schemas, 'reporter') }}{% endraw %}
-  - {% raw %}{{ grant_select_on_schemas(schemas, 'transformer') }}{% endraw %}
+  - {% raw %}"{{ grant_select_on_schemas(schemas, 'reporter') }}"{% endraw %}
+  - {% raw %}"{{ grant_select_on_schemas(schemas, 'transformer') }}"{% endraw %}
 
 {% elif project.warehouse == 'snowflake' %}
 
@@ -42,7 +42,7 @@ models:
   transient: true
 
 on-run-end:
-  - {% raw %}{{ grant_select_on_schemas(schemas, 'reporter') }}{% endraw %}
-  - {% raw %}{{ grant_select_on_schemas(schemas, 'transformer') }}{% endraw %}
+  - {% raw %}"{{ grant_select_on_schemas(schemas, 'reporter') }}"{% endraw %}
+  - {% raw %}"{{ grant_select_on_schemas(schemas, 'transformer') }}"{% endraw %}
 
 {% endif %}
