@@ -1,11 +1,11 @@
 {% if project.warehouse in ('postgres', 'redshift') %}
 {% raw %}
-{% macro grant_select_on_schemas(schemas, group) %}
+{% macro grant_select_on_schemas(schemas, groups) %}
   {% for schema in schemas %}
-    grant usage on schema {{ schema }} to group {{ group }};
-    grant select on all tables in schema {{ schema }} to group {{ group }};
+    grant usage on schema {{ schema }} to group {{ groups|join(', group ') }};
+    grant select on all tables in schema {{ schema }} to group {{ groups|join(', group ') }};
     alter default privileges in schema {{ schema }}
-        grant select on tables to group {{ group }};
+        grant select on tables to group {{ groups|join(', group ') }};
   {% endfor %}
 {% endmacro %}
 {% endraw %}
