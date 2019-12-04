@@ -28,8 +28,7 @@ models:
   bind: false
 
 on-run-end:
-  - {% raw %}"{{ grant_select_on_schemas(schemas, 'reporter') }}"{% endraw %}
-  - {% raw %}"{{ grant_select_on_schemas(schemas, 'transformer') }}"{% endraw %}
+  - {% raw %}"{{ grant_select_on_schemas(schemas, ['transformer','reporter']) }}"{% endraw %}
 
 {% elif project.warehouse == 'snowflake' %}
 
