@@ -5,13 +5,13 @@ provide it, and populate as much of the dbt project as possible
 
 ## Installation & usage
 1. Clone this repo, and `cd` into it.
-2. Install the requirements:
+2. Preferably in a new virtual env, install the CLI like so:
 ```bash
-$ pip3 install -r requirements.txt
+$ pip install -e .
 ```
 3. To create a new client project run a command like following:
 ```bash
-$ python3 dbt-init.py --client jaffle_shop --warehouse snowflake --target_dir ~/clients/
+$ dbt-init --client jaffle_shop --warehouse snowflake --target_dir ~/clients/
 ```
 You can also check the available arguments with `python3 dbt-init.py --help`
 
