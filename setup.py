@@ -1,9 +1,14 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 from setuptools.command.install import install
+import os
+
+this_directory = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(this_directory, "README.md")) as f:
+    long_description = f.read()
 
 
 package_name = "dbt-init"
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 description = """Create a dbt project the way Fishtown Analytics would"""
 
 
@@ -29,10 +34,12 @@ setup(
     name=package_name,
     version=VERSION,
     description=description,
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     author="Claire Carroll",
     author_email="claire@fishtownanalytics.com",
     url="https://github.com/fishtown-analyics/dbt-init",
-    packages=find_packages(),
+    packages=[],
     package_data={},
     test_suite="test",
     entry_points={"console_scripts": ["dbt-init = core.main:main"]},
