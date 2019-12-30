@@ -70,7 +70,6 @@ def parse_args(args):
         type=check_snake_case,
     )
 
-
     parsed = parser.parse_args(args)
     return parsed
 

@@ -4,16 +4,12 @@ dbt-init will create a project as a subdirectory within the target directory you
 provide it, and populate as much of the dbt project as possible
 
 ## Installation & usage
-1. Clone this repo, and `cd` into it.
-2. Install the requirements:
+1. Install using `pip install dbt-init`
+2. To create a new client project run a command like following:
 ```bash
-$ pip3 install -r requirements.txt
+$ dbt-init --client jaffle_shop --warehouse snowflake --target_dir ~/clients/
 ```
-3. To create a new client project run a command like following:
-```bash
-$ python3 dbt-init.py --client jaffle_shop --warehouse snowflake --target_dir ~/clients/
-```
-You can also check the available arguments with `python3 dbt-init.py --help`
+You can also check the available arguments with `dbt-init --help`
 
 ## Once you've created your project
 1. Update `sample.profile.yml` to contain the correct profile details for your
