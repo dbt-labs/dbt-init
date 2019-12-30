@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import find_packages, setup
 from setuptools.command.install import install
 import os
 
@@ -39,7 +39,7 @@ setup(
     author="Claire Carroll",
     author_email="claire@fishtownanalytics.com",
     url="https://github.com/fishtown-analyics/dbt-init",
-    packages=[],
+    packages=find_packages(),
     package_data={},
     test_suite="test",
     entry_points={"console_scripts": ["dbt-init = core.main:main"]},
