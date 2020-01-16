@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from argparse import ArgumentParser, ArgumentTypeError
+from pathlib import Path
 import sys
 import os
 import re
@@ -7,7 +8,7 @@ import re
 import jinja2
 
 
-STARTER_PROJECT_DIR_PATH = os.path.dirname(__file__)
+STARTER_PROJECT_DIR_PATH =  Path(__file__).parents[1]
 STARTER_PROJECT_DIR = "starter-project"
 STARTER_PROJECT_PATH = os.path.join(STARTER_PROJECT_DIR_PATH, STARTER_PROJECT_DIR)
 
@@ -126,7 +127,6 @@ def should_copy_file(base_name, contents):
 def create_starter_project(project):
     # set the path we are targeting
     client_project_path = os.path.join(project["dir_path"], project["dir_name"])
-
     # for each file in the starter project, copy a rendered version of the file
     for subdir, dirs, files in os.walk(STARTER_PROJECT_PATH):
         for base_name in files:
