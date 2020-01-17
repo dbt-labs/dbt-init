@@ -8,7 +8,7 @@ with open(os.path.join(this_directory, "README.md")) as f:
 
 
 package_name = "dbt-init"
-VERSION = "0.2.2"
+VERSION = "0.2.7"
 description = """Create a dbt project the way Fishtown Analytics would"""
 
 
@@ -40,7 +40,10 @@ setup(
     author_email="claire@fishtownanalytics.com",
     url="https://github.com/fishtown-analyics/dbt-init",
     packages=find_packages(),
-    package_data={},
+    package_data={
+        '': ['starter-project/**/*']
+    },
+    include_package_data=True,
     test_suite="test",
     entry_points={"console_scripts": ["dbt-init = core.main:main"]},
     scripts=[],
