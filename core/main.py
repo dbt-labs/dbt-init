@@ -45,7 +45,7 @@ def parse_args(args):
         "--client",
         required=True,
         help="The name of the client you are creating this project for",
-        type=check_snake_case,
+        type=check_kebab_case,
     )
     required.add_argument(
         "--warehouse",
@@ -93,16 +93,17 @@ def handle(parsed):
     describes the dbt project
     """
 
-    kebab_case_client = parsed.client.replace("_", "-")
+    client_kebab_case = parsed.client
+    client_snake_case = client_kebab_case.replace("-", "_")
 
     project = {}
 
-    project["client_name"] = parsed.client
+    project["client_name"] = client_kebab_case
     project["warehouse"] = map_warehouse(parsed.warehouse)
-    project["name"] = parsed.project_name or parsed.client
+    project["name"] = parsed.project_name or client_snake_case
     project["dir_path"] = parsed.target_dir
-    project["dir_name"] = parsed.project_directory or "{}-dbt".format(kebab_case_client)
-    project["profile_name"] = parsed.profile_name or parsed.client
+    project["dir_name"] = parsed.project_directory or "{}-dbt".format(client_kebab_case)
+    project["profile_name"] = parsed.profile_name or client_snake_case
 
     return project
 
