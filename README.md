@@ -31,5 +31,19 @@ variables you can use – a lot of them have defaults based on the client name.
 {{ project.profile_name }}: The name of the profile used by this project, e.g. jaffle_shop.
 ```
 
+## Testing out the changes
+1. Clone the repo and `cd` into it
+2. Create a new virtual environment `dbt-init-dev` and activate it. Make sure
+your virtualenv uses python 3
+3. Run `pip install -r requirements-dev.txt`
+4. You should now have a developemnt version of `dbt-init` installed. Test your
+changes by creating a sample project and inspecting the results (I know, we
+should build real tests), e.g.:
+```
+$ dbt-init --client test --target_dir ~/clrcrl/ --warehouse bigquery
+New dbt project for test created at /Users/claire/clrcrl/test-dbt! 🎉
+$ open /Users/claire/clrcrl/test-dbt
+```
+
 ## To-do:
 - [ ] Configure a new profile as part of init process
