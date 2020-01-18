@@ -8,7 +8,7 @@ with open(os.path.join(this_directory, "README.md")) as f:
 
 
 package_name = "dbt-init"
-VERSION = "0.2.7"
+VERSION = "0.3.0"
 description = """Create a dbt project the way Fishtown Analytics would"""
 
 
