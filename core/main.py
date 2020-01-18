@@ -50,7 +50,16 @@ def parse_args(args):
     required.add_argument(
         "--warehouse",
         required=True,
-        choices=["bigquery", "postgres", "redshift", "snowflake"],
+        choices=[
+            "bigquery",
+            "bq",
+            "postgres",
+            "pg",
+            "redshift",
+            "rs",
+            "snowflake",
+            "sf",
+        ],
         help="The warehouse your client is using",
     )
     required.add_argument(
@@ -89,7 +98,7 @@ def handle(parsed):
     project = {}
 
     project["client_name"] = parsed.client
-    project["warehouse"] = parsed.warehouse
+    project["warehouse"] = map_warehouse(parsed.warehouse)
     project["name"] = parsed.project_name or parsed.client
     project["dir_path"] = parsed.target_dir
     project["dir_name"] = parsed.project_directory or "{}-dbt".format(kebab_case_client)
@@ -120,6 +129,17 @@ def check_file_path(s):
     if not os.path.exists(s):
         raise ArgumentTypeError("Target directory {} does not exist!".format(s))
     return s
+
+
+def map_warehouse(s):
+    mapping_dict = {
+        "bq": "bigquery",
+        "rs": "redshift",
+        "sf": "snowflake",
+        "pg": "postgres",
+    }
+
+    return mapping_dict.get(s, s)
 
 
 def should_copy_file(base_name, contents):
