@@ -8,7 +8,7 @@ import re
 import jinja2
 
 
-STARTER_PROJECT_DIR_PATH =  Path(__file__).parents[1]
+STARTER_PROJECT_DIR_PATH = Path(__file__).parents[1]
 STARTER_PROJECT_DIR = "starter-project"
 STARTER_PROJECT_PATH = os.path.join(STARTER_PROJECT_DIR_PATH, STARTER_PROJECT_DIR)
 
@@ -129,11 +129,13 @@ def create_starter_project(project):
     client_project_path = os.path.join(project["dir_path"], project["dir_name"])
     # for each file in the starter project, copy a rendered version of the file
     for subdir, dirs, files in os.walk(STARTER_PROJECT_PATH):
-        if os.path.basename(subdir) != '__pycache__':
+        if os.path.basename(subdir) != "__pycache__":
             for base_name in files:
                 rendered_template = render_template(subdir, base_name, project)
                 if should_copy_file(base_name, rendered_template):
-                    target_dir = subdir.replace(STARTER_PROJECT_PATH, client_project_path)
+                    target_dir = subdir.replace(
+                        STARTER_PROJECT_PATH, client_project_path
+                    )
                     target_filepath = os.path.join(target_dir, base_name)
                     write_file(target_filepath, rendered_template)
 

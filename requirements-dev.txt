@@ -2,3 +2,4 @@
 ipdb
 twine
 wheel
+black

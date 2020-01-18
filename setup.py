@@ -40,9 +40,7 @@ setup(
     author_email="claire@fishtownanalytics.com",
     url="https://github.com/fishtown-analyics/dbt-init",
     packages=find_packages(),
-    package_data={
-        '': ['starter-project/**/*']
-    },
+    package_data={"": ["starter-project/**/*"]},
     include_package_data=True,
     test_suite="test",
     entry_points={"console_scripts": ["dbt-init = core.main:main"]},
