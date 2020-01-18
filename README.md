@@ -33,11 +33,11 @@ variables you can use – a lot of them have defaults based on the client name.
 
 ## Testing out the changes
 If you're just making simple changes to the starter project, testing out the
-chanes is optional. If you want to improve the script, or just get familiar
+changes is optional. If you want to improve the script, or just get familiar
 with virtual environments, this is a good idea!
-1. Clone the repo and `cd` into it
+1. Clone this repo and `cd` into it
 2. Create a new virtual environment `dbt-init-dev` and activate it. Make sure
-your virtualenv uses python 3
+your virtual environment uses python 3.
 3. Run `pip install -r requirements-dev.txt`
 4. You should now have a development version of `dbt-init` installed. Test your
 changes by creating a sample project and inspecting the results (I know, we
@@ -45,6 +45,7 @@ should build real tests), e.g.:
 ```
 $ dbt-init --client test --target_dir ~/clrcrl/ --warehouse bigquery
 New dbt project for test created at /Users/claire/clrcrl/test-dbt! 🎉
+
 $ open /Users/claire/clrcrl/test-dbt
 ```
 
