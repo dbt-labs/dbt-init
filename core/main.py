@@ -37,35 +37,39 @@ def write_file(file_path, contents):
 
 def parse_args(args):
     parser = ArgumentParser(description="dbt project starter")
-    parser.add_argument(
+    parser._action_groups.pop()
+    required = parser.add_argument_group("required arguments")
+    optional = parser.add_argument_group("optional arguments")
+
+    required.add_argument(
         "--client",
         required=True,
         help="The name of the client you are creating this project for",
         type=check_snake_case,
     )
-    parser.add_argument(
+    required.add_argument(
         "--warehouse",
         required=True,
         choices=["bigquery", "postgres", "redshift", "snowflake"],
         help="The warehouse your client is using",
     )
-    parser.add_argument(
+    required.add_argument(
         "--target_dir",
         required=True,
         help="The target directory name. Note that the project will be created as a subdirectory within the target directory",
         type=check_file_path,
     )
-    parser.add_argument(
+    optional.add_argument(
         "--project_name",
         help="The name of your dbt project (as defined in dbt_project.yml). Defaults to <my_client>",
         type=check_snake_case,
     )
-    parser.add_argument(
+    optional.add_argument(
         "--project_directory",
         help="The name of your dbt project directory. Defaults to <my-client>-dbt",
         type=check_kebab_case,
     )
-    parser.add_argument(
+    optional.add_argument(
         "--profile_name",
         help="The name of the profile your dbt project will use. Defaults to <my_client>",
         type=check_snake_case,
