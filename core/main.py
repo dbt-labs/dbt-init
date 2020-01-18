@@ -63,23 +63,23 @@ def parse_args(args):
         help="The warehouse your client is using",
     )
     required.add_argument(
-        "--target_dir",
+        "--target-dir",
         required=True,
         help="The target directory name. Note that the project will be created as a subdirectory within the target directory",
         type=check_file_path,
     )
     optional.add_argument(
-        "--project_name",
+        "--project-name",
         help="The name of your dbt project (as defined in dbt_project.yml). Defaults to <my_client>",
         type=check_snake_case,
     )
     optional.add_argument(
-        "--project_directory",
+        "--project-directory",
         help="The name of your dbt project directory. Defaults to <my-client>-dbt",
         type=check_kebab_case,
     )
     optional.add_argument(
-        "--profile_name",
+        "--profile-name",
         help="The name of the profile your dbt project will use. Defaults to <my_client>",
         type=check_snake_case,
     )
