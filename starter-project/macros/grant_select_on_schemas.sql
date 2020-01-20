@@ -14,13 +14,16 @@
 {% elif project.warehouse == 'snowflake' %}
 
 {% raw %}
-{% macro grant_select_on_schemas(schemas, role) %}
+{% macro grant_select_on_schemas(databases,schemas, role) %}
   {% for schema in schemas %}
     grant usage on schema {{ schema }} to role {{ role }};
     grant select on all tables in schema {{ schema }} to role {{ role }};
     grant select on all views in schema {{ schema }} to role {{ role }};
-    grant select on future tables in schema {{ schema }} to role {{ role }};
-    grant select on future views in schema {{ schema }} to role {{ role }};
+    grant usage on future schemas in database {{database}} to role {{ role }};
+    grant select on future tables in database {{database}} to role {{ role }};
+    grant select on future views in database {{database}} to role {{ role }};
+    grant usage on all schemas in database {{database}} to role {{ role }};
+    grant select on all tables in database {{database}} to role {{ role }};
   {% endfor %}
 {% endmacro %}
 {% endraw %}
