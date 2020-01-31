@@ -18,7 +18,7 @@ clean-targets:
     - "dbt_modules"
 
 seeds:
-  quoting: true
+  quote_columns: true
 
 {% if project.warehouse == 'bigquery' %}
 {# Currently we don't have any best practice BQ configurations #}
