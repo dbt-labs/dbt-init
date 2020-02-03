@@ -43,8 +43,4 @@ quoting:
 models:
   transient: true
 
-on-run-end:
-  - {% raw %}"{{ grant_select_on_schemas(datebases,schemas, 'reporter') }}"{% endraw %}
-  - {% raw %}"{{ grant_select_on_schemas(databases,schemas, 'transformer') }}"{% endraw %}
-
 {% endif %}

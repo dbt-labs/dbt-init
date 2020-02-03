@@ -44,6 +44,16 @@ $ dbt debug
 $ dbt run
 ```
 
+{% if project.warehouse == 'snowflake' %}
+## Granting privileges on Snowflake
+To grant privileges on the entire target database, run the following [operation](https://docs.getdbt.com/docs/using-operations). Note that this operation will only need to be run once, you'll only need to re-run it if you change your target database.
+```bash
+$ dbt run-operation grant_select_on_database --args '{role: "reporter"}'
+
+```
+
+{% endif %}
+
 ## Coding conventions
 This project follows Fishtown Analytics' [coding conventions](https://github.com/fishtown-analytics/corp/blob/master/dbt_coding_conventions.md) and [git guide](https://github.com/fishtown-analytics/corp/blob/master/git-guide.md).
 
