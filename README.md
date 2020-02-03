@@ -7,7 +7,7 @@ provide it, and populate as much of the dbt project as possible
 1. Install using `pip install dbt-init`
 2. To create a new client project run a command like following:
 ```bash
-$ dbt-init --client jaffle_shop --warehouse snowflake --target_dir ~/clients/
+$ dbt-init --client jaffle-shop --warehouse snowflake --target-dir ~/clients/
 ```
 You can also check the available arguments with `dbt-init --help`
 
@@ -26,7 +26,7 @@ variables you can use – a lot of them have defaults based on the client name.
 ```
 {{ project.name }}: The name of the project, as defined in `dbt_project.yml`, e.g. jaffle_shop.
 {{ project.warehouse }}: The warehouse that a client is using.
-{{ project.client_name }}: The name of the client, e.g. jaffle_shop.
+{{ project.client_name }}: The name of the client, e.g. jaffle-shop.
 {{ project.dir_name }}: The name of the directory this project is in, e.g. jaffle-shop-dbt.
 {{ project.profile_name }}: The name of the profile used by this project, e.g. jaffle_shop.
 ```
@@ -43,7 +43,7 @@ your virtual environment uses python 3.
 changes by creating a sample project and inspecting the results (I know, we
 should build real tests), e.g.:
 ```
-$ dbt-init --client test --target_dir ~/clrcrl/ --warehouse bigquery
+$ dbt-init --client test --target-dir ~/clrcrl/ --warehouse bigquery
 New dbt project for test created at /Users/claire/clrcrl/test-dbt! 🎉
 
 $ open /Users/claire/clrcrl/test-dbt

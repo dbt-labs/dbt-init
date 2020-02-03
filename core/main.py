@@ -8,7 +8,7 @@ import re
 import jinja2
 
 
-STARTER_PROJECT_DIR_PATH =  Path(__file__).parents[1]
+STARTER_PROJECT_DIR_PATH = Path(__file__).parents[1]
 STARTER_PROJECT_DIR = "starter-project"
 STARTER_PROJECT_PATH = os.path.join(STARTER_PROJECT_DIR_PATH, STARTER_PROJECT_DIR)
 
@@ -37,36 +37,49 @@ def write_file(file_path, contents):
 
 def parse_args(args):
     parser = ArgumentParser(description="dbt project starter")
-    parser.add_argument(
+    parser._action_groups.pop()
+    required = parser.add_argument_group("required arguments")
+    optional = parser.add_argument_group("optional arguments")
+
+    required.add_argument(
         "--client",
         required=True,
         help="The name of the client you are creating this project for",
-        type=check_snake_case,
+        type=check_kebab_case,
     )
-    parser.add_argument(
+    required.add_argument(
         "--warehouse",
         required=True,
-        choices=["bigquery", "postgres", "redshift", "snowflake"],
+        choices=[
+            "bigquery",
+            "bq",
+            "postgres",
+            "pg",
+            "redshift",
+            "rs",
+            "snowflake",
+            "sf",
+        ],
         help="The warehouse your client is using",
     )
-    parser.add_argument(
-        "--target_dir",
+    required.add_argument(
+        "--target-dir",
         required=True,
         help="The target directory name. Note that the project will be created as a subdirectory within the target directory",
         type=check_file_path,
     )
-    parser.add_argument(
-        "--project_name",
+    optional.add_argument(
+        "--project-name",
         help="The name of your dbt project (as defined in dbt_project.yml). Defaults to <my_client>",
         type=check_snake_case,
     )
-    parser.add_argument(
-        "--project_directory",
+    optional.add_argument(
+        "--project-directory",
         help="The name of your dbt project directory. Defaults to <my-client>-dbt",
         type=check_kebab_case,
     )
-    parser.add_argument(
-        "--profile_name",
+    optional.add_argument(
+        "--profile-name",
         help="The name of the profile your dbt project will use. Defaults to <my_client>",
         type=check_snake_case,
     )
@@ -80,16 +93,17 @@ def handle(parsed):
     describes the dbt project
     """
 
-    kebab_case_client = parsed.client.replace("_", "-")
+    client_kebab_case = parsed.client
+    client_snake_case = client_kebab_case.replace("-", "_")
 
     project = {}
 
-    project["client_name"] = parsed.client
-    project["warehouse"] = parsed.warehouse
-    project["name"] = parsed.project_name or parsed.client
+    project["client_name"] = client_kebab_case
+    project["warehouse"] = map_warehouse(parsed.warehouse)
+    project["name"] = parsed.project_name or client_snake_case
     project["dir_path"] = parsed.target_dir
-    project["dir_name"] = parsed.project_directory or "{}-dbt".format(kebab_case_client)
-    project["profile_name"] = parsed.profile_name or parsed.client
+    project["dir_name"] = parsed.project_directory or "{}-dbt".format(client_kebab_case)
+    project["profile_name"] = parsed.profile_name or client_snake_case
 
     return project
 
@@ -118,6 +132,17 @@ def check_file_path(s):
     return s
 
 
+def map_warehouse(s):
+    mapping_dict = {
+        "bq": "bigquery",
+        "rs": "redshift",
+        "sf": "snowflake",
+        "pg": "postgres",
+    }
+
+    return mapping_dict.get(s, s)
+
+
 def should_copy_file(base_name, contents):
     is_empty_file = contents.strip() == ""
     if base_name == ".gitkeep" or not is_empty_file:
@@ -129,11 +154,13 @@ def create_starter_project(project):
     client_project_path = os.path.join(project["dir_path"], project["dir_name"])
     # for each file in the starter project, copy a rendered version of the file
     for subdir, dirs, files in os.walk(STARTER_PROJECT_PATH):
-        if os.path.basename(subdir) != '__pycache__':
+        if os.path.basename(subdir) != "__pycache__":
             for base_name in files:
                 rendered_template = render_template(subdir, base_name, project)
                 if should_copy_file(base_name, rendered_template):
-                    target_dir = subdir.replace(STARTER_PROJECT_PATH, client_project_path)
+                    target_dir = subdir.replace(
+                        STARTER_PROJECT_PATH, client_project_path
+                    )
                     target_filepath = os.path.join(target_dir, base_name)
                     write_file(target_filepath, rendered_template)
 
