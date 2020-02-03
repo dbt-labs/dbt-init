@@ -12,3 +12,4 @@
     grant select on all tables in database {{ database }} to role {{ role }};
 {% endmacro %}
 {% endraw %}
+{% endif %}
