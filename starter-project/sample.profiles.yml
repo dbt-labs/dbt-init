@@ -11,6 +11,7 @@
   target: dev
 
 {% elif project.warehouse in ('postgres', 'redshift') %}
+{% set default_port = 5439 if project.warehouse == 'redshift' else 5432 %}
 {{ project.profile_name }}:
   outputs:
     dev:
@@ -19,7 +20,7 @@
       host: [hostname]
       user: [username]
       pass: [password]
-      port: 5439
+      port: {{ default_port }}
       dbname: [database name]
       schema: dbt_[username] # e.g. dbt_alice
   target: dev
