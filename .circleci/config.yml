@@ -13,31 +13,27 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install -e .
-      - run:
-          name: "Create Starter Project - BigQuery"
-          command: |
-            mkdir jaffle_shop_bigquery
-            . venv/bin/activate
-            dbt-init --client jaffle-shop --warehouse bigquery --target-dir ./jaffle_shop_bigquery
-      - run:
-          name: "Create Starter Project - Postgres"
-          command: |
-            mkdir jaffle_shop_postgres
-            . venv/bin/activate
-            dbt-init --client jaffle-shop --warehouse postgres --target-dir ./jaffle_shop_postgres
-      - run:
-          name: "Create Starter Project - Redshift"
-          command: |
-            mkdir jaffle_shop_redshift
-            . venv/bin/activate
-            dbt-init --client jaffle-shop --warehouse redshift --target-dir ./jaffle_shop_redshift
+            pip install cookiecutter
       - run:
           name: "Create Starter Project - Snowflake"
           command: |
-            mkdir jaffle_shop_snowflake
             . venv/bin/activate
-            dbt-init --client jaffle-shop --warehouse snowflake --target-dir ./jaffle_shop_snowflake
+            cookiecutter --no-input gh:fishtown-analytics/dbt-init --checkout ${CIRCLE_BRANCH} name=jaffle_shop project_name=jaffle_shop_snowflake warehouse=snowflake
+      - run:
+          name: "Create Starter Project - Redshift"
+          command: |
+            . venv/bin/activate
+            cookiecutter --no-input gh:fishtown-analytics/dbt-init --checkout ${CIRCLE_BRANCH} name=jaffle_shop project_name=jaffle_shop_redshift warehouse=redshift
+      - run:
+          name: "Create Starter Project - BigQuery"
+          command: |
+            . venv/bin/activate
+            cookiecutter --no-input gh:fishtown-analytics/dbt-init --checkout ${CIRCLE_BRANCH} name=jaffle_shop project_name=jaffle_shop_bigquery warehouse=bigquery
+      - run:
+          name: "Create Starter Project - Postgres"
+          command: |
+            . venv/bin/activate
+            cookiecutter --no-input gh:fishtown-analytics/dbt-init --checkout ${CIRCLE_BRANCH} name=jaffle_shop project_name=jaffle_shop_postgres warehouse=postgres
       - save_cache:
           key: deps1-{{ .Branch }}
           paths:
