@@ -1,6 +1,6 @@
-name: {{ project.name }}
+name: {{ cookiecutter.name }}
 
-profile: {{ project.profile_name }}
+profile: {{ cookiecutter.profile_name }}
 
 version: '1.0'
 
@@ -20,20 +20,20 @@ clean-targets:
 seeds:
   quote_columns: false
 
-{% if project.warehouse == 'bigquery' %}
+{% if cookiecutter.warehouse == 'bigquery' %}
 {# Currently we don't have any best practice BQ configurations #}
 
-{% elif project.warehouse == 'postgres' -%}
+{% elif cookiecutter.warehouse == 'postgres' -%}
 {# Currently we don't have any best practice PG configurations #}
 
-{% elif project.warehouse == 'redshift' -%}
+{% elif cookiecutter.warehouse == 'redshift' -%}
 models:
   bind: false
 
 on-run-end:
   - {% raw %}"{{ grant_select_on_schemas(schemas, ['transformer','reporter']) }}"{% endraw %}
 
-{% elif project.warehouse == 'snowflake' %}
+{% elif cookiecutter.warehouse == 'snowflake' %}
 
 quoting:
   database: false

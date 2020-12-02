@@ -1,15 +1,26 @@
 # dbt-init
-A tool to create dbt projects for consulting.
+A cookiecutter template to create dbt projects for consulting.
 dbt-init will create a project as a subdirectory within the target directory you
 provide it, and populate as much of the dbt project as possible
 
-## Installation & usage
-1. Install using `pip install dbt-init`
-2. To create a new client project run a command like following:
+## Usage
+1. Install [cookiecutter](https://github.com/cookiecutter/cookiecutter) (preferably in a virtual environemnt) `pip install cookiecutter`
+2. Then run `cookiecutter gh:fishtown-analytics/dbt-init`. This will give you a number of prompts — hitting `enter` will use the default value indicated in the `[]` parentheses.
+
 ```bash
-$ dbt-init --client jaffle-shop --warehouse snowflake --target-dir ~/clients/
+$ cookiecutter gh:fishtown-analytics/dbt-init
+name [e.g. jaffle_shop]: jaffle_shop
+Select warehouse:
+1 - snowflake
+2 - redshift
+3 - bigquery
+4 - postgres
+Choose from 1, 2, 3, 4 [1]: 1
+client_name [jaffle-shop]:
+project_name [jaffle-shop-dbt]:
+profile_name [jaffle_shop]:
 ```
-You can also check the available arguments with `dbt-init --help`
+3. `cd` into your newly created dbt project!
 
 ## Once you've created your project
 1. Update `sample.profile.yml` to contain the correct profile details for your
@@ -24,29 +35,11 @@ statements in the post-run hooks (defined in `dbt_project.yml`).
 If you're interested in helping build out the starter project, here is a list of
 variables you can use – a lot of them have defaults based on the client name.
 ```
-{{ project.name }}: The name of the project, as defined in `dbt_project.yml`, e.g. jaffle_shop.
-{{ project.warehouse }}: The warehouse that a client is using.
-{{ project.client_name }}: The name of the client, e.g. jaffle-shop.
-{{ project.dir_name }}: The name of the directory this project is in, e.g. jaffle-shop-dbt.
-{{ project.profile_name }}: The name of the profile used by this project, e.g. jaffle_shop.
-```
-
-## Testing out the changes
-If you're just making simple changes to the starter project, testing out the
-changes is optional. If you want to improve the script, or just get familiar
-with virtual environments, this is a good idea!
-1. Clone this repo and `cd` into it
-2. Create a new virtual environment `dbt-init-dev` and activate it. Make sure
-your virtual environment uses python 3.
-3. Run `pip install -r requirements-dev.txt`
-4. You should now have a development version of `dbt-init` installed. Test your
-changes by creating a sample project and inspecting the results (I know, we
-should build real tests), e.g.:
-```
-$ dbt-init --client test --target-dir ~/clrcrl/ --warehouse bigquery
-New dbt project for test created at /Users/claire/clrcrl/test-dbt! 🎉
-
-$ open /Users/claire/clrcrl/test-dbt
+{{ cookiecutter.name }}: The name of the project, as defined in `dbt_project.yml`, e.g. jaffle_shop.
+{{ cookiecutter.warehouse }}: The warehouse that a client is using.
+{{ cookiecutter.client_name }}: The name of the client, e.g. jaffle-shop.
+{{ cookiecutter.project_name }}: The name of the directory this project is in, e.g. jaffle-shop-dbt (this has to be called project name for cookiecutter reasons)
+{{ cookiecutter.profile_name }}: The name of the profile used by this project, e.g. jaffle_shop.
 ```
 
 ## To-do:

@@ -1,5 +1,0 @@
--e .
-ipdb
-twine
-wheel
-black

@@ -1,4 +1,4 @@
-{% if project.warehouse in ('postgres', 'redshift') %}
+{% if cookiecutter.warehouse in ('postgres', 'redshift') %}
 {% raw %}
 {% macro grant_select_on_schemas(schemas, groups) %}
   {% set groups_csv = 'group ' ~  groups | join(', group ') %}
@@ -11,7 +11,7 @@
 {% endmacro %}
 {% endraw %}
 
-{% elif project.warehouse == 'snowflake' %}
+{% elif cookiecutter.warehouse == 'snowflake' %}
 
 {% raw %}
 {% macro grant_select_on_schemas(schemas, role) %}
