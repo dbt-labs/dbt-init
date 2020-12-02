@@ -1,8 +1,8 @@
-{% if project.warehouse == 'bigquery' %}
-{{ project.profile_name }}:
+{% if cookiecutter.warehouse == 'bigquery' %}
+{{ cookiecutter.profile_name }}:
   outputs:
     dev:
-      type: {{ project.warehouse }}
+      type: {{ cookiecutter.warehouse }}
       threads: 8
       method: oauth
       project: [project]
@@ -10,12 +10,12 @@
       timeout_seconds: 300
   target: dev
 
-{% elif project.warehouse in ('postgres', 'redshift') %}
-{% set default_port = 5439 if project.warehouse == 'redshift' else 5432 %}
-{{ project.profile_name }}:
+{% elif cookiecutter.warehouse in ('postgres', 'redshift') %}
+{% set default_port = 5439 if cookiecutter.warehouse == 'redshift' else 5432 %}
+{{ cookiecutter.profile_name }}:
   outputs:
     dev:
-      type: {{ project.warehouse }}
+      type: {{ cookiecutter.warehouse }}
       threads: 8
       host: [hostname]
       user: [username]
@@ -25,11 +25,11 @@
       schema: dbt_[username] # e.g. dbt_alice
   target: dev
 
-{% elif project.warehouse == 'snowflake' %}
-{{ project.profile_name }}:
+{% elif cookiecutter.warehouse == 'snowflake' %}
+{{ cookiecutter.profile_name }}:
   outputs:
     dev:
-      type: {{ project.warehouse }}
+      type: {{ cookiecutter.warehouse }}
       threads: 16
       account: [account id]
       user: [username]

@@ -1,0 +1,7 @@
+{
+  "name": "e.g. jaffle_shop",
+  "warehouse": ["snowflake", "redshift", "bigquery", "postgres"],
+  "client_name": "{{ cookiecutter.name.replace('_', '-') }}",
+  "project_name": "{{ cookiecutter.name.replace('_', '-') }}-dbt",
+  "profile_name": "{{ cookiecutter.name }}"
+}
