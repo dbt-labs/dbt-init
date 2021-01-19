@@ -6,7 +6,7 @@ hyperlinks so we can go on the same journey. e.g.:
 * Also go to [this GA dashboard](www.link_to_ga.com).
 -->
 
-## Expected resuts:
+## Expected results:
 <!---
 Explain what you expected to see when you went on your journey of bug-discovery.
 If you have historical data (e.g. a screenshot of the same report from last
@@ -14,7 +14,7 @@ week), here is a great place to include it! e.g.:
 * The pageview numbers for yesterday _should_ be somewhat similar.
 -->
 
-## Actual results
+## Actual results:
 <!---
 Explain what you saw that made you go "that doesn't look right". Include
 screenshots! e.g.:
@@ -24,7 +24,7 @@ screenshots! e.g.:
 [Screenshot of GA]
 -->
 
-## Extra details
+## Extra details:
 <!---
 Include any extra details that you think might be relevant. If you're someone
 that is close to the dbt code, you might know of a recent related PR. e.g.:
